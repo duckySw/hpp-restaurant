@@ -481,6 +481,7 @@
 </style>
 
 <script>
+import _ from "@/utils";
 
 export default {
   data() {
@@ -567,6 +568,34 @@ export default {
       if(idx === 0){
         // 管理员登录
         this.is_admin = 1
+
+        // 发送post请求，检验其是否符合登录条件，返回为true/false
+        _.post('//localhost:8000/admin/adminLogin', {
+          name: this.AdminInfo.name,
+          pwd: this.AdminInfo.pwd
+        }, res => {
+          if (res.data) {
+            // 获取管理员有关的订单、菜品数据
+
+          } else {
+            this.$message.error('数据库连接失败');
+          }
+        }, () => {
+          this.$message.error('数据库连接失败')
+        })
+
+
+        _.get('//localhost:8000/admin/getAdminInfo', {},
+            res => {
+              console.log(res.data)
+              this.$message({
+                message: '管理员登录成功',
+                type: 'success'
+              });
+
+            }, () => {
+              this.$message.error('管理员登录失败');
+            })
 
       }else {
         // 用户登录
